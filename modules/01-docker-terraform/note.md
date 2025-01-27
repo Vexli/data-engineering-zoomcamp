@@ -34,7 +34,7 @@
 -   install postgress via docker, based off the [yaml](https://hub.docker.com/_/postgres)
 
 ```bash
-  docker run -it \
+docker run -it \
     -e POSTGRES_USER="root" \
     -e POSTGRES_PASSWORD="root" \
     -e POSTGRES_DB="ny_taxi" \
@@ -48,3 +48,47 @@
 -   grab the Yellow Taxi data with `wget`
     -   `wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz`
 -   find docker containers with `docker ps`
+
+#### [1.2.3 Connecting `pgAdmin` and Postgres](https://www.youtube.com/watch?v=hCAIVe9N0ow&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=7)
+
+-   Get pgAdmin
+    -   `docker pull dpage/pgadmin4`
+    -   use `ctrl+c` to quit
+
+```bash
+docker run -it \
+    -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+    -e PGADMIN_DEFAULT_PASSWORD="root" \
+    -p 8080:80 \
+    dpage/pgadmin4
+```
+
+-   how do we connect localhost and container?
+    -   put them in the same network
+        -   `docker network create pg-network`
+
+```bash
+docker run -it \
+    -e POSTGRES_USER="root" \
+    -e POSTGRES_PASSWORD="root" \
+    -e POSTGRES_DB="ny_taxi" \
+    -v ny_taxi_postgres_data:/home/gexli/Documents/Project/code/data-engineering-zoomcamp/project/ny_taxi_postgres_data \
+    -p 5432:5432 \
+    --network=pg-network \
+    --name pg-database \
+    postgres:13
+```
+
+```bash
+docker run -it \
+    -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+    -e PGADMIN_DEFAULT_PASSWORD="root" \
+    -p 8080:80 \
+    --network=pg-network \
+    --name pgadmin \
+    dpage/pgadmin4
+```
+
+-   you can remove containers with `docker rm <CONTAINER>`
+
+#### [1.2.4 Dockerizing the Ingestion Script](https://www.youtube.com/watch?v=B1WwATwf-vY&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=8)
