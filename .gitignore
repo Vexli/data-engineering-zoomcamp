@@ -1,3 +1,4 @@
 *.env
 
+/modules/01-docker-terraform/work/*.csv
 /project/ny_taxi/*.csv

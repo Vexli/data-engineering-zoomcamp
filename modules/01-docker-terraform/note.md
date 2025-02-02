@@ -72,7 +72,7 @@ docker run -it \
     -e POSTGRES_USER="root" \
     -e POSTGRES_PASSWORD="root" \
     -e POSTGRES_DB="ny_taxi" \
-    -v ny_taxi_postgres_data:/home/gexli/Documents/Project/code/data-engineering-zoomcamp/project/ny_taxi_postgres_data \
+    -v ny_taxi_postgres_data:{PATH_PROJECT}/data-engineering-zoomcamp/project/ny_taxi_postgres_data \
     -p 5432:5432 \
     --network=pg-network \
     --name pg-database \
@@ -92,3 +92,62 @@ docker run -it \
 -   you can remove containers with `docker rm <CONTAINER>`
 
 #### [1.2.4 Dockerizing the Ingestion Script](https://www.youtube.com/watch?v=B1WwATwf-vY&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=8)
+
+-   Convert Jupyter Notebooks to Python with
+    -   `jupyter nbconvert --to=script ny_taxi_csv.ipynb`
+-   toggle between overwrite/insert mode with `INSERT`
+-   force pip install in a specific python environment
+    -   `PATH/TO/PYTHON -m pip install <PACKAGE>`
+-   specify params for python
+
+```bash
+URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+
+python3 data_ingest.py \
+    --user=root \
+    --pasw=root \
+    --host=localhost \
+    --port=5432 \
+    --db=ny_taxi \
+    --tble=yellow_taxi_trips \
+    --url=${URL}
+```
+
+-   update docker container
+
+```bash
+docker build -t taxi_ingest:v001 .
+```
+
+-   load in docker
+
+```bash
+docker run -it \
+    --network=pg-network \
+    taxi_ingest:v001 \
+        --user=root \
+        --pasw=root \
+        --host=pg-database \
+        --port=5432 \
+        --db=ny_taxi \
+        --tble=yellow_taxi_trips \
+        --url=${URL}
+```
+
+-   launcg HTTP server via Python
+    -   `python -m http.server`
+
+#### [1.2.5 Running Postgres and pgAdmin with Docker-Compose](https://www.youtube.com/watch?v=hKI6PkPhpa0&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=9)
+
+-   manual docker-compose install required on linux
+-   setup containers from docker-compose file
+    -   `docker-compose up`
+-   shutdown docker-compose
+    -   `docker-compose down`
+
+#### [1.2.6 SQL Refresher](https://www.youtube.com/watch?v=QEcps_iskgg&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=10)
+
+-   Drop time from a DATETIME
+    -   `DATE_TRUNC('DAY', DATETIME_COLUMN)`
+
+#### [1.3.1 Terraform Primer](https://www.youtube.com/watch?v=s2bOYDCKl_M&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=11)
