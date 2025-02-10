@@ -151,3 +151,80 @@ docker run -it \
     -   `DATE_TRUNC('DAY', DATETIME_COLUMN)`
 
 #### [1.3.1 Terraform Primer](https://www.youtube.com/watch?v=s2bOYDCKl_M&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=11)
+
+##### Concept
+
+-   Infrastructure as code
+
+##### Usage
+
+-   Easy readability
+-   Easier collaboration
+-   Reproducability
+-   Ensure resources are removed
+    -   Don't need to remember everything you installed
+
+##### What is it not?
+
+-   Does not manage or update code
+-   Not made to deploy software
+-   Does not allow you to channge immutable resources
+-   Not used to manage resources not defined in the terraform files
+
+##### What it is?
+
+-   Infrastructure as code
+
+##### Providers?
+
+-   Platform connectors
+
+```mermaid
+architecture-beta
+    group cloud(cloud)[GCP AWS AZURE etc]
+    group local(disk)[Local]
+
+    service terra(server)[Terraform] in local
+    service server(server)[Server] in cloud
+
+    terra:R <--> L:server
+```
+
+##### Commands
+
+-   all are preceeded by `terraform`
+    -   [install info](https://developer.hashicorp.com/terraform/install)
+-   `fmt`
+    -   Formats the code
+-   `init`
+    -   Get the required providers to your local machine
+-   `plan`
+    -   Shows what you are about to do
+-   `apply`
+    -   Do what is in the `.tf` file
+-   `destroy`
+    -   Get rid of everything that was defined in the `.tf` file
+-   Always use `yes` to confirm `apply` or `destroy` commands
+-   Apply variable file with `terraform <COMMAND> -var-file="<FILENAME>.tfvars"`
+
+##### Additional information
+
+#### [1.3.2 Terraform Basics](https://www.youtube.com/watch?v=Y2ux7gq3Z0o&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=12)
+
+-   Use Service Accounts as pseudo users where you never have to log in
+-   Always grant least required rights
+
+##### Terraform
+
+| File Extension | Usage                                     |
+| -------------- | ----------------------------------------- |
+| `.tf`          | where you define your terraform bucket    |
+| `.tfvars`      | Where you can define many variables       |
+| `.tfstate`     | where you see the setup of your terraform |
+
+#### [1.3.2 Terraform Basics](https://www.youtube.com/watch?v=PBi0hHjLftk&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=13)
+
+-   `unset`
+    -   removes set variables
+
+#### [1.4.1 Setting up the Environment non Google Cloud (Cloud VM + SSH access)](https://www.youtube.com/watch?v=ae-CV2KfoN0&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=14)
